@@ -10,6 +10,23 @@
 <div class="container mt-5">
     <h1 class="mb-4">Set Up Your Password</h1>
 
+    <div class="container mt-4 mt-3">
+        @if ($errors->any())
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="card-title mb-0">Validation Errors</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        @foreach ($errors->all() as $error)
+                            <li class="list-group-item text-danger">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+    </div>
+
     <!-- Password Setup Form -->
     <form action="{{route('storeActivatedUser')}}" method="POST">
         @csrf
@@ -24,13 +41,24 @@
         <!-- New Password Input -->
         <div class="mb-3">
             <label for="newPassword" class="form-label">New Password</label>
-            <input type="password" class="form-control" id="newPassword" name="newPassword" required>
+            <input type="password" class="form-control" id="newPassword" name="password" >
         </div>
 
         <!-- Confirm New Password Input -->
         <div class="mb-3">
             <label for="confirmNewPassword" class="form-label">Confirm New Password</label>
-            <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" required>
+            <input type="password" class="form-control" id="confirmNewPassword" name="password_confirmation">
+        </div>
+
+        <div class="alert alert-info mt-4">
+            <strong>Password Requirements:</strong>
+            <ul class="mb-0">
+                <li>At least 8 characters long</li>
+                <li>One uppercase letter</li>
+                <li>One lowercase letter</li>
+                <li>One number</li>
+                <li>One special character (e.g., !@#$%^&*)</li>
+            </ul>
         </div>
 
         <!-- Action Buttons -->

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Events\UserCreated;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserValidationRequest;
+use App\Http\Requests\ValidateAndSaveUserRequest;
+use App\Jobs\SendAccountSuccessMail;
 use App\Mail\SendActivationEmail;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -20,25 +23,23 @@ class AdminController extends Controller
         return view('createUser') ;
     }
 
+    public function store(UserValidationRequest $request) {
 
-    public function store(Request $request) {
+        $request->validated() ;
 
         $userName = $request->name ;
         $userEmail = $request->email ;
         $userRole = $request->role ;
-        $is_active = $request->is_active ;
-
 
         //return response()->json(['status' => true, 'data' => $data], 200) ;
 
         $dummyPassword = fake()->password(8, 20) ;
-        $data = [
-            'userName' => $userName, 
-            '$userEmail' => $userEmail,
-            'userRole' => $userRole,
-            'randomPassword' => $dummyPassword,
-            'is_activated' => 0
-        ] ;
+        $is_exists = User::where('email', '=', $userEmail)->first() ;
+
+        if($is_exists) {
+            return redirect()->back()->withErrors(
+                ['error' => 'User Already Exists!!.']);
+        }
 
         $user = new User() ;
         $user->name = $userName ;
@@ -54,7 +55,8 @@ class AdminController extends Controller
         $email = $user->email;
     
        
-        Mail::send(new SendActivationEmail($name, $dummyPassword, $activationLink, $email)) ;
+        //Mail::send(new SendActivationEmail($name, $dummyPassword, $activationLink, $email)) ;
+        event(new UserCreated($name, $dummyPassword, $activationLink, $email)) ;
 
         return redirect()->route('welcome') ;
 
@@ -68,18 +70,26 @@ class AdminController extends Controller
         return view('accountActivation') ;
     }
 
-    public function validateAndSaveUser(Request $request) {
+    public function validateAndSaveUser(ValidateAndSaveUserRequest $request) {
+
+            $request->validated() ;
             $dummyPassword = $request->dummyPassword ;
             $newPassword = $request->newPassword ;
             $confirmPassword = $request->confirmNewPassword ;
 
+        
             $user = User::where('password', '=', $dummyPassword)->first() ;
+            //dd($user) ;
 
-            $user->password = Hash::make($confirmPassword) ;
-            $user->is_activated = 1 ; 
-            $user->save() ;
-
-
+            if($user) {
+                $user->password = Hash::make($confirmPassword) ;
+                $user->is_activated = 1 ; 
+                $user->save() ;
+                SendAccountSuccessMail::dispatch($user) ;
+            } else{
+                return redirect()->back()->withErrors(
+                    ['dummy_password' => 'The dummy password does not match our records.']);
+            }
 
 
 

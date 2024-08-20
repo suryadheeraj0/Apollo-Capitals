@@ -10,19 +10,37 @@
 <div class="container mt-5">
     <h1 class="mb-4">Create New User</h1>
 
+    <div class="container mt-4 mt-3">
+        @if ($errors->any())
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="card-title mb-0">Validation Errors</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        @foreach ($errors->all() as $error)
+                            <li class="list-group-item text-danger">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+    </div>
+    
+
     <!-- User Information Section -->
     <form action="{{route('storeUser')}}" method="POST">
         @csrf
 
         <div class="mb-3">
             <label for="firstName" class="form-label">Name</label>
-            <input type="text" class="form-control" id="firstName" name="name" required>
+            <input type="text" class="form-control" id="firstName" name="name">
         </div>
 
 
         <div class="mb-3">
             <label for="email" class="form-label">Email Address</label>
-            <input type="email" class="form-control" id="email" name="email" required>
+            <input type="email" class="form-control" id="email" name="email">
         </div>
 
         <!-- Role Assignment Section -->
