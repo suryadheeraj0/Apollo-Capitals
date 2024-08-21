@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Events\UserCreated;
 use App\Events\WelcomeMailEvent;
 use App\Listeners\SendAccountSuccessMail;
+use App\Listeners\SendWelcomeCreatedMail;
 use App\Listeners\SendWelcomeMailListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -24,7 +25,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserCreated::class => [
             SendWelcomeMailListener::class
-        ]
+        ],
+        WelcomeMailEvent::class => [
+            SendWelcomeCreatedMail::class
+        ],
     ];
 
     /**

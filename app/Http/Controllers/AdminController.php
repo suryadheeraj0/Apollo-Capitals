@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\UserCreated;
+use App\Events\WelcomeMailEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserValidationRequest;
 use App\Http\Requests\ValidateAndSaveUserRequest;
@@ -85,7 +86,8 @@ class AdminController extends Controller
                 $user->password = Hash::make($confirmPassword) ;
                 $user->is_activated = 1 ; 
                 $user->save() ;
-                SendAccountSuccessMail::dispatch($user) ;
+                //SendAccountSuccessMail::dispatch($user) ;
+                event(new WelcomeMailEvent($user)) ;
             } else{
                 return redirect()->back()->withErrors(
                     ['dummy_password' => 'The dummy password does not match our records.']);
