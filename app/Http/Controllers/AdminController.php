@@ -96,5 +96,13 @@ class AdminController extends Controller
 
 
     }
+
+    public function usersDataWithAccess() {
+        $user = User::all() ;
+        return view('admin_dashboard', compact('user')) ;
+    }
+
+
+
 }
 
