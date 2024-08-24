@@ -19,7 +19,7 @@
                     </p>
 
                     <!-- Check if MFA is enabled for the user -->
-                    @if (auth()->user()->is_mfa_enabled)
+                    @if (auth()->user()->enable_disable_at_logout)
                         <form method="POST" action="{{ route('profile.disableMfa') }}" class="mt-4">
                             @csrf
                             <x-primary-button>
