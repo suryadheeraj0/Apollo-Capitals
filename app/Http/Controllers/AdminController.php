@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use App\Events\UserCreated;
@@ -45,13 +46,13 @@ class AdminController extends Controller
         $user = new User() ;
         $user->name = $userName ;
         $user->email = $userEmail ;
-        $user->password = $dummyPassword ;
+        $user->password = Hash::make($dummyPassword);
         $user->role = $userRole ;
         $user->save() ;
 
         
         $name = $user->name;
-        $dummyPassword = $user->password;
+        //$dummyPassword = $user->password;
         $activationLink = route('accountActivation');
         $email = $user->email;
     
@@ -59,11 +60,10 @@ class AdminController extends Controller
         //Mail::send(new SendActivationEmail($name, $dummyPassword, $activationLink, $email)) ;
         event(new UserCreated($name, $dummyPassword, $activationLink, $email)) ;
 
-        return redirect()->route('welcome') ;
+        return redirect()->route('welcome');
 
         //id, name, email, email_verified_at, password, remember_token, created_at, updated_at, is_active
 
-        
     }
 
 
@@ -71,31 +71,6 @@ class AdminController extends Controller
         return view('accountActivation') ;
     }
 
-    public function validateAndSaveUser(ValidateAndSaveUserRequest $request) {
-
-            $request->validated() ;
-            $dummyPassword = $request->dummyPassword ;
-            $newPassword = $request->newPassword ;
-            $confirmPassword = $request->confirmNewPassword ;
-
-        
-            $user = User::where('password', '=', $dummyPassword)->first() ;
-            //dd($user) ;
-
-            if($user) {
-                $user->password = Hash::make($confirmPassword) ;
-                $user->is_activated = 1 ; 
-                $user->save() ;
-                //SendAccountSuccessMail::dispatch($user) ;
-                event(new WelcomeMailEvent($user)) ;
-            } else{
-                return redirect()->back()->withErrors(
-                    ['dummy_password' => 'The dummy password does not match our records.']);
-            }
-
-
-
-    }
 
     public function usersDataWithAccess() {
         $user = User::all() ;
@@ -105,4 +80,3 @@ class AdminController extends Controller
 
 
 }
-

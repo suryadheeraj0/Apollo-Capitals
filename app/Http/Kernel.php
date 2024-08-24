@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use Laravel\Fortify\Http\Middleware\EnsureTwoFactorEnabled;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -36,6 +37,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            //\Laravel\Fortify\Http\Middleware\EnsureTwoFactorEnabled::class,
         ],
 
         'api' => [
@@ -43,6 +45,8 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+    
+
     ];
 
     /**
@@ -63,5 +67,11 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        //'mfa' => \App\Http\Middleware\EnsureMfaIsVerified::class,
+        //'fortify.2fa' => \Laravel\Fortify\Http\Middleware\EnsureTwoFactorIsEnabled::class,
+        'otp.verified' => \App\Http\Middleware\OtpVerified::class,
+
     ];
+
+    
 }

@@ -36,7 +36,7 @@ class SendActivationEmail extends Mailable
     {
         return new Envelope(
             to: $this->email ,
-            subject: 'Activate Your Account',
+            subject: 'Welcome to Apollo Capitals - Your Account Details & Next Steps',
         );
     }
 

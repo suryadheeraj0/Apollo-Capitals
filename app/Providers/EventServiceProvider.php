@@ -7,10 +7,13 @@ use App\Events\WelcomeMailEvent;
 use App\Listeners\SendAccountSuccessMail;
 use App\Listeners\SendWelcomeCreatedMail;
 use App\Listeners\SendWelcomeMailListener;
+use App\Listeners\TwoFactorAuthenticationConfirmedListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use Laravel\Fortify\Events\TwoFactorAuthenticationConfirmed;
+use Laravel\Fortify\Events\TwoFactorAuthenticationEvent;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -26,9 +29,10 @@ class EventServiceProvider extends ServiceProvider
         UserCreated::class => [
             SendWelcomeMailListener::class
         ],
-        WelcomeMailEvent::class => [
-            SendWelcomeCreatedMail::class
+        TwoFactorAuthenticationConfirmed::class => [
+            TwoFactorAuthenticationConfirmedListener::class,
         ],
+       
     ];
 
     /**
