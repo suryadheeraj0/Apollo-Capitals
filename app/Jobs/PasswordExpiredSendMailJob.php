@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Mail\SendWelcomeMail;
+use App\Mail\PasswordExpiredMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -10,17 +10,19 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
 
-class SendAccountSuccessMail implements ShouldQueue
+class PasswordExpiredSendMailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $user ;
+    public $name ;
+    public $email ;
     /**
      * Create a new job instance.
      */
-    public function __construct($user)
+    public function __construct($name, $email)
     {
-        $this->user = $user ;
+        $this->name = $name ;
+        $this->email = $email ;
     }
 
     /**
@@ -28,6 +30,6 @@ class SendAccountSuccessMail implements ShouldQueue
      */
     public function handle(): void
     {
-        Mail::send(new SendWelcomeMail($this->user)) ;
+        Mail::send(new PasswordExpiredMail($this->name, $this->email)) ;
     }
 }

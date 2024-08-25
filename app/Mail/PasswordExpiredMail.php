@@ -9,17 +9,19 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendWelcomeMail extends Mailable
+class PasswordExpiredMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $user ;
 
+    public $name ;
+    public $email ;
     /**
      * Create a new message instance.
      */
-    public function __construct($user)
+    public function __construct($name, $email)
     {
-        $this->user = $user ;
+        $this->name = $name ;
+        $this->email = $email ;
     }
 
     /**
@@ -28,8 +30,8 @@ class SendWelcomeMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            to: $this->user->email,
-            subject: 'Welcome to Our Services',
+            to: $this->email,
+            subject: 'Dear User Your Password is Expired!',
         );
     }
 
@@ -39,7 +41,7 @@ class SendWelcomeMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.welocomeMail',
+            view: 'email.password-expired-reset-password',
         );
     }
 

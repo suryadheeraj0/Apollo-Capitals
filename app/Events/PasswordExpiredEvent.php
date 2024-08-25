@@ -10,17 +10,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class WelcomeMailEvent
+class PasswordExpiredEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $user ;
 
+    public $name ;
+    public $email ;
     /**
      * Create a new event instance.
      */
-    public function __construct($user)
+    public function __construct($name, $email)
     {
-        $this->user = $user ;
+        $this->name = $name ;
+        $this->email = $email ;
     }
 
     /**
