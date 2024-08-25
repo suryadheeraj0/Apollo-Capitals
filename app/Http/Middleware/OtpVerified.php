@@ -16,7 +16,7 @@ class OtpVerified
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::check() || !session()->has('otp_verified') || Auth::user()->is_mfa_enabled) {
+        if (Auth::check() && Auth::user()->is_mfa_enabled && !session('otp_verified')) {
             return redirect()->route('otp.verify');
         }
         return $next($request);

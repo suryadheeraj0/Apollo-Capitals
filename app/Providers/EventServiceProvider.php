@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\PasswordExpiredEvent;
 use App\Events\UserCreated;
 use App\Events\WelcomeMailEvent;
+use App\Listeners\PasswordExpiredListener;
 use App\Listeners\SendAccountSuccessMail;
 use App\Listeners\SendWelcomeCreatedMail;
 use App\Listeners\SendWelcomeMailListener;
@@ -29,9 +31,9 @@ class EventServiceProvider extends ServiceProvider
         UserCreated::class => [
             SendWelcomeMailListener::class
         ],
-        TwoFactorAuthenticationConfirmed::class => [
-            TwoFactorAuthenticationConfirmedListener::class,
-        ],
+        PasswordExpiredEvent::class => [
+            PasswordExpiredListener::class,
+        ]
        
     ];
 
