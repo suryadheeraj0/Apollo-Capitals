@@ -48,8 +48,9 @@
             <label for="roles" class="form-label">Assign Role</label>
             <select class="form-select" id="roles" name="role">
                 <option value="">Select</option>
-                <option value="AccountManager">Account Manager</option>
-                <option value="user">User</option>
+                @foreach ($roles as $role)
+                <option value="{{$role->name}}">{{$role->name}}</option>
+                @endforeach
             </select>
         </div>
         

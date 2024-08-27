@@ -109,23 +109,13 @@
 
         <form id="request-otp-form" action="{{ route('otp.request') }}" method="POST">
             @csrf
-            <button type="button" class="secondary-btn" onclick="requestNewOtp()">Request New OTP</button>
+            <button type="submit" class="secondary-btn" onclick="requestNewOtp()">Request New OTP</button>
         </form>
     </div>
 
     <script>
         function requestNewOtp() {
-            fetch('{{ route('otp.request') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-                body: JSON.stringify({})
-            })
-            .then(response => response.json())
-            .then(data => alert(data.message))
-            .catch(error => console.error('Error:', error));
+           alert('New OTP Has Sent To Your Registerd Mail')
         }
     </script>
 </body>
