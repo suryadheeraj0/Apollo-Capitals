@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendNotificationJob;
+use App\Jobs\SendOtpNotificationJob;
 use App\Notifications\OtpNotification;
 use App\Services\OtpService;
 use Illuminate\Http\Request;
@@ -39,8 +41,11 @@ public function requestNewOtp(Request $request)
 {
     $user = Auth::user();
     $otp = $this->otpService->generateOtp($user->id);
-    $user->notify(new OtpNotification($otp));
+    //$user->notify(new OtpNotification($otp));
+    info(auth()->user()->email) ;
+    SendOtpNotificationJob::dispatch($otp, auth()->user()) ;
 
-    return response()->json(['message' => 'New OTP has been sent to your email.']);
+    //return response()->json(['message' => 'New OTP has been sent to your email.']);
+    return redirect()->back() ;//->with('message', 'New OTP has been sent to your email.') ;
 }
 }

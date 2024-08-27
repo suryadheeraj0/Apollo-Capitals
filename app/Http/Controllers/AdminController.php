@@ -10,8 +10,10 @@ use App\Http\Requests\UserValidationRequest;
 use App\Http\Requests\ValidateAndSaveUserRequest;
 use App\Jobs\SendAccountSuccessMail;
 use App\Mail\SendActivationEmail;
+use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Spatie\Permission\Models\Role;
@@ -22,7 +24,8 @@ use Illuminate\Support\Str;
 class AdminController extends Controller
 {
     public function createUser() {
-        return view('createUser') ;
+        $roles = Role::all() ;
+        return view('createUser', compact('roles')) ;
     }
 
     public function store(UserValidationRequest $request) {
@@ -59,6 +62,16 @@ class AdminController extends Controller
        
         //Mail::send(new SendActivationEmail($name, $dummyPassword, $activationLink, $email)) ;
         event(new UserCreated($name, $dummyPassword, $activationLink, $email)) ;
+        //$user = Auth::user();
+        ActivityLog::create([
+            'user_id' => 1,
+             'user_name' => 'Admin',
+             'role' => 'Admin',
+             'action' => 'New user Created!',
+             'ip_address' => request()->ip() ,
+            'time' => now()
+        ]) ;
+
 
         return redirect()->route('welcome');
 

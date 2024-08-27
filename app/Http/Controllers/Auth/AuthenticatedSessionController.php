@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Jobs\SendOtpNotificationJob;
+use App\Models\ActivityLog;
 use App\Models\User;
 use App\Notifications\OtpNotification;
 use App\Providers\RouteServiceProvider;
@@ -57,10 +59,19 @@ class AuthenticatedSessionController extends Controller
         if (Auth::attempt($request->only('email', 'password'))) {
 
             $user = Auth::user();
+            ActivityLog::create([
+                'user_id' => $user->id,
+                 'user_name' => $user->name,
+                 'role' => $user->role,
+                 'action' => 'the user Logged In!',
+                 'ip_address' => request()->ip() ,
+                'time' => now()
+            ]) ;
             if($user->is_mfa_enabled){
                 $otpService = new OtpService();
                 $otp = $otpService->generateOtp($user->id);
-                $user->notify(new OtpNotification($otp));
+                //$user->notify(new OtpNotification($otp));
+                SendOtpNotificationJob::dispatch($otp, auth()->user()) ;
 
                 return redirect()->route('otp.verify');
             }else {
@@ -95,6 +106,15 @@ class AuthenticatedSessionController extends Controller
             $user->is_mfa_enabled = false;
             $user->save();
         }
+        $user = Auth::user();
+            ActivityLog::create([
+                'user_id' => $user->id,
+                 'user_name' => $user->name,
+                 'role' => $user->role,
+                 'action' => 'the user Logged Out!',
+                 'ip_address' => request()->ip() ,
+                'time' => now()
+            ]) ;
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

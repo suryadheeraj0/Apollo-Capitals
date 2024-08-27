@@ -10,6 +10,8 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\OtpController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SearchController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 ;
 
@@ -42,7 +44,6 @@ Route::middleware(['auth', 'otp.verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -55,9 +56,32 @@ Route::post('/otp/request', [OtpController::class, 'requestNewOtp'])
 
 Route::post('/profile/enable-mfa', [ProfileController::class, 'enableMfa'])->name('profile.enableMfa');
 Route::post('/profile/disable-mfa', [ProfileController::class, 'disableMfa'])->name('profile.disableMfa');
-    
+
+
+//Route For User Inactivity 
+Route::post('/extend-session', function () {
+    if (Auth::check()) {
+        // Optionally, you can implement additional checks or actions here
+        return response()->json(['status' => 'success']);
+    }
+    return response()->json(['status' => 'error']);
+})->name('extend-session');
+
+
+Route::post('/update-inactivity-status', function () {
+    session(['inactivity_popup' => true]);
+    return response()->json(['message' => 'Inactivity status updated']);
+})->middleware('auth');
+//end of user inactivity routes
 
 });
+
+
+
+Route::get('/get', [SearchController::class, 'searchPostsWithComments'])->name('posts.search') ;
+
+Route::get('/search-page', [SearchController::class, 'searchPage']) ;
+
 
 // routes/web.php
 //Route::post('/otp/request', [OtpController::class, 'requestNewOtp'])->name('otp.request');
@@ -84,6 +108,15 @@ Route::post('store-activated-user', [AdminController::class, 'validateAndSaveUse
 Route::get('admi',[AdminController::class,'usersDataWithAccess'])->name('admi');
 
 Route::resource('admin', AdminRolesController::class);
+
+
+
+//Route for users list with thier access for admin 
+
+Route::get('users-list-with-access', [SearchController::class, 'showUsersList']) ;
+    
+Route::get('users-list-with-access-filters', [SearchController::class, 'searchUser'])->name('users.search') ;
+
 
 
 
