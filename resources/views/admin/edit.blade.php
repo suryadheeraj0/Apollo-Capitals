@@ -19,14 +19,14 @@
                     <div class="mb-4">
                         <label for="permissions" class="form-label">Edit Permissions</label>
                         <div class="row">
-                            @foreach (['create_role', 'edit_role', 'delete_role'] as $permission)
+                            @foreach ($permissions as $permission)
                                 <div class="col-md-4">
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="{{ $permission }}"
-                                            name="permissions[]" value="{{ $permission }}"
-                                            {{ $role->hasPermissionTo($permission) ? 'checked' : '' }}>
-                                        <label class="form-check-label" for="{{ $permission }}">
-                                            {{ ucfirst(str_replace('_', ' ', $permission)) }}
+                                        <input type="checkbox" class="form-check-input" id="{{ $permission->id }}"
+                                            name="permissions[]" value="{{ $permission->name }}"
+                                            {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="{{ $permission->id }}">
+                                            {{ ucfirst(str_replace('_', ' ', $permission->name)) }}
                                         </label>
                                     </div>
                                 </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -113,9 +114,54 @@ class SearchController extends Controller
         
         return view('usersListWithAccess', compact('users', 'sortBy', 'sortDirection'));
 
-
-
     }
 
+
+    public function searchUserForTaskCreation(Request $request) {
+        $query = $request->input('query');
+        $dateFrom = $request->input('date_from');
+        $dateTo = $request->input('date_to');
+        $sortBy = $request->input('sort_by', 'created_at'); // Default sorting by created_at
+        $sortDirection = $request->input('sort_direction', 'desc'); // Default sorting direction
+
+
+        $users = User::query() ;
+
+
+        if ($query) {
+            $users = $users->where(function ($q) use ($query) {
+                $q->where('name', 'LIKE', "%{$query}%")
+                  ->orWhere('role', 'LIKE', "%{$query}%")
+                  ->orWhere('email', ' LIKE', "%{$query}%") ;
+            });
+        }
+
+
+        // Apply date range filter if present
+        if ($dateFrom && $dateTo) {
+            $users->whereBetween('created_at', [$dateFrom, $dateTo]);
+        } elseif ($dateFrom) {
+            $users->whereDate('created_at', '>=', $dateFrom);
+        } elseif ($dateTo) {
+            $users->whereDate('created_at', '<=', $dateTo);
+        }
+
+
+         // Apply sorting
+        $users->orderBy($sortBy, $sortDirection);
+        $users = $users->paginate(10) ;
+        
+        return view('user_manage.task_user', compact('users', 'sortBy', 'sortDirection'));
+    }
+
+
+    public function showCustomersToAdmin() {
+        $customers = Customer::paginate(5) ;
+        $sortBy =  'created_at' ;
+        $sortDirection = 'asc' ;
+
+        return view('view_customers_for_admin', compact('customers', 'sortBy', 'sortDirection')) ;
+
+    }
 
 }

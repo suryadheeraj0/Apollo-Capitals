@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,6 +36,17 @@ class ConfirmablePasswordController extends Controller
         }
 
         $request->session()->put('auth.password_confirmed_at', time());
+
+        //activity log
+        $user = Auth::user();
+        ActivityLog::create([
+            'user_id' => $user->id,
+             'user_name' => $user->name,
+             'role' => $user->role,
+             'action' => 'User Password Changed',
+             'ip_address' => request()->ip() ,
+            'time' => now()
+        ]) ;
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

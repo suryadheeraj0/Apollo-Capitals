@@ -23,6 +23,16 @@ use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
+
+    //showing admin dashboard
+    public function showAdminPage(User $user) {
+
+
+        $this->authorize('adminPageAccess', $user) ;
+
+        return view('admin_dashboard');
+    }
+
     public function createUser() {
         $roles = Role::all() ;
         return view('createUser', compact('roles')) ;
@@ -64,16 +74,27 @@ class AdminController extends Controller
         event(new UserCreated($name, $dummyPassword, $activationLink, $email)) ;
         //$user = Auth::user();
         ActivityLog::create([
-            'user_id' => 1,
-             'user_name' => 'Admin',
+            'user_id' => auth()->user()->id,
+             'user_name' => auth()->user()->name,
              'role' => 'Admin',
              'action' => 'New user Created!',
              'ip_address' => request()->ip() ,
             'time' => now()
         ]) ;
 
+        if($request->role === 'Admin') {
+           $user = User::where('email', '=', $userEmail)->first() ;
+           $user->assignRole('Admin') ;
+        }elseif($request->role === 'User'){
+            $user = User::where('email', '=', $userEmail)->first() ;
+            $user->assignRole('User') ;
+        }elseif($request->role === 'Account Manager') {
+            $user = User::where('email', '=', $userEmail)->first() ;
+            $user->assignRole('Account Manager') ;
+        }
 
-        return redirect()->route('welcome');
+
+        return redirect()->route('createUser')->with('message', 'New User Created Successfully!');
 
         //id, name, email, email_verified_at, password, remember_token, created_at, updated_at, is_active
 

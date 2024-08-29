@@ -25,6 +25,11 @@
                 </div>
             </div>
         @endif
+        @if (session('message'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('message') }}
+        </div>
+        @endif
     </div>
     
 
@@ -57,7 +62,7 @@
         <!-- Action Buttons -->
         <div class="d-flex justify-content-between">
             <button type="submit" class="btn btn-success">Save & Create</button>
-            <a href="" class="btn btn-danger">Cancel</a>
+            <a href="{{route('admin_dashboard')}}" class="btn btn-danger">Cancel</a>
         </div>
     </form>
 </div>

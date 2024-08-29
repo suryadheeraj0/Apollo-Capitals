@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
  
 class AdminRolesController extends Controller
@@ -15,6 +18,7 @@ class AdminRolesController extends Controller
     {
         //
         $role=Role::all();
+        info($role) ;
         return view('admin.index',compact('role'));
     }
  
@@ -24,7 +28,9 @@ class AdminRolesController extends Controller
     public function create()
     {
         //
-        return view('admin.create');
+        $user=auth()->user();
+        $permissions = Permission::all() ;
+        return view('admin.create',compact('user', 'permissions'));
     }
  
     /**
@@ -32,17 +38,28 @@ class AdminRolesController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $request->validate([
-            'role'=>['required','string','max:255','unique:roles,name'],
-            'permissions'=>['required','array'],
-        ]);
+       $request->validate([
+        'role' => ['required', 'string', 'max:255', 'unique:roles,name'],
+        'permissions' => ['required'],
+       ]);
  
-        $role=Role::create(['name'=>$request->role]);
-        $role->syncPermissions($request->permissions);
+       $role = Role::create(['name' => $request->role]);
+       $role->syncPermissions($request->permissions);
+
+       //activity log
+       $user = Auth::user();
+       ActivityLog::create([
+           'user_id' => $user->id,
+            'user_name' => $user->name,
+            'role' => $user->role,
+            'action' => 'user Created a new role!',
+            'ip_address' => request()->ip() ,
+           'time' => now()
+       ]) ;
  
-        return redirect()->route('admin.index');
+       return redirect()->route('admin.index')->with(['success' => 'New Role is Created!']);
     }
+ 
  
     /**
      * Display the specified resource.
@@ -59,7 +76,8 @@ class AdminRolesController extends Controller
     {
         //
         $role=Role::findOrFail($id);
-        return view('admin.edit',compact('role'));
+        $permissions = Permission::all() ;
+        return view('admin.edit',compact('role', 'permissions'));
     }
  
     /**
@@ -67,16 +85,22 @@ class AdminRolesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
         $role=Role::findOrFail($id);
-        $request->validate([
-            'permissions'=>['required','array'],
-        ]);
- 
- 
+
         $role->syncPermissions($request->permissions);
+
+        //activity log
+        $user = Auth::user();
+        ActivityLog::create([
+            'user_id' => $user->id,
+             'user_name' => $user->name,
+             'role' => $user->role,
+             'action' => 'user updated roles and permissions!',
+             'ip_address' => request()->ip() ,
+            'time' => now()
+        ]) ;
  
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.index')->with(['success' => 'Permissions are Updated!']);
     }
  
     /**
@@ -87,6 +111,22 @@ class AdminRolesController extends Controller
         //
         $role=Role::findOrFail($id);
         $role->delete();
-        return redirect()->route('admin.index');
+
+
+
+        //activity log
+        $user = Auth::user();
+        ActivityLog::create([
+            'user_id' => $user->id,
+             'user_name' => $user->name,
+             'role' => $user->role,
+             'action' => 'user deleted a role!',
+             'ip_address' => request()->ip() ,
+            'time' => now()
+        ]) ;
+
+
+        return redirect()->route('admin.index')->with(['success' => 'Role Deleted!']);
     }
 }
+ 

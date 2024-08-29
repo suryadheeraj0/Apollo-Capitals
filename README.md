@@ -1,66 +1,158 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Apollo Capitals
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Apollo Capitals** is a CRM (Customer Relationship Management) application tailored for financing businesses. It provides comprehensive management of user roles, customer data, tasks, appointments, and user activities. Built with robust technologies like PHP, Laravel, and MySQL, Apollo Capitals offers advanced features, including role-based access control and multi-factor authentication (MFA), ensuring a secure and user-friendly experience.
 
-## About Laravel
+## Table of Contents
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+1. Features
+2. Technologies Used
+3. Installation Guide
+4. Usage Guide
+5. Security
+6. Contributing
+7. Known Issues
+8. License
+9. Contact Information
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **User Role Management:** Admins can create new users, assign roles (Admin, Account Manager, User), and manage permissions with ease.
+- **Customer Management:** All roles (Admins, Users, Account Managers) can create and view customer profiles, allowing efficient customer relationship management.
+- **Task Management:** Admins can assign tasks to users with detailed descriptions, while Users and Account Managers can manage their own tasks, including creation, editing, updating, and deletion.
+- **Appointment Scheduling:** Users can schedule appointments for themselves or customers, with the ability to view and manage all appointments based on their roles.
+- **Activity Logs:** Admins have the capability to monitor all user activities, while Users and Account Managers can review their own actions.
+- **Multi-Factor Authentication (MFA):** Secure your account with email-based OTP (One-Time Password) for 2FA (Two-Factor Authentication). OTPs expire in 1 minute, ensuring timely and secure access.
+- **Password Management:** Enforces password updates every 30 days for all users. New users receive an email notification with credentials and are prompted to update their password upon first login in the profile section.
+- **Automated Notifications:** Users receive email notifications for key actions, such as password expiry reminders and new user account creation with credential details.
 
-## Learning Laravel
+## Technologies Used
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Backend:** PHP, Laravel 10
+- **Database:** MySQL
+- **Authentication:** Laravel Breeze
+- **Role & Permission Management:** Laravel Spatie
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Installation Guide
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Follow these steps to set up Apollo Capitals on your local machine:
 
-## Laravel Sponsors
+1. **Clone the Repository:**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Premium Partners
+   git clone https://github.com/suryaDheeraj0/apollo-capitals.git
+   cd apollo-capitals
+ 
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+2. **Install Dependencies:**
+
+   Ensure you have Composer installed, then run:
+
+
+   composer install
+  
+
+3. **Configure Environment Variables:**
+
+   Copy `.env.example` to `.env` and configure your environment variables, particularly for database and mail settings:
+
+   cp .env.example .env
+
+
+   Update your database settings in `.env`:
+
+
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=your_database
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+ 
+
+   Set up your mail configuration (using Gmail as an example):
+
+
+   MAIL_MAILER=smtp
+   MAIL_HOST=smtp.gmail.com
+   MAIL_PORT=587
+   MAIL_USERNAME=your_gmail_username
+   MAIL_PASSWORD=your_gmail_password
+   MAIL_ENCRYPTION=tls
+   MAIL_FROM_ADDRESS=your_email@example.com
+   MAIL_FROM_NAME="${APP_NAME}"
+
+
+4. **Run Migrations and Seed the Database:**
+
+
+   php artisan migrate --seed
+ 
+
+5. **Install Laravel Breeze and Spatie Permissions:**
+
+
+   composer require laravel/breeze --dev
+   php artisan breeze:install
+   npm install && npm run dev
+   composer require spatie/laravel-permission
+   php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+   php artisan migrate
+   
+
+6. **Start the Application:**
+
+   To run the application locally, execute:
+
+  
+   php artisan serve
+ 
+
+   Additionally, start the job queue and scheduler:
+
+  
+   php artisan queue:work
+   php artisan schedule:work
+ 
+
+## Usage Guide
+
+1. **Admin Role:**
+   - Create and manage user accounts.
+   - Assign roles and permissions.
+   - Manage customers, tasks, appointments, and view all user activity logs.
+
+2. **User & Account Manager Roles:**
+   - Create and view customer profiles.
+   - Manage personal tasks and appointments.
+   - Access personal activity logs.
+
+## Security
+
+- **Password Expiry:** Users must update their password every 30 days. Automatic email reminders are sent to users whose passwords are nearing expiration.
+- **Two-Factor Authentication:** Secure login with OTP-based MFA, enhancing account security.
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+We welcome contributions from the community! If you'd like to contribute, please fork the repository and use a feature branch. Pull requests are warmly welcome.
 
-## Code of Conduct
+1. Fork the repository.
+2. Create your feature branch (`git checkout -b feature/my-feature`).
+3. Commit your changes (`git commit -am 'Add my feature'`).
+4. Push to the branch (`git push origin feature/my-feature`).
+5. Create a new Pull Request.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Known Issues
 
-## Security Vulnerabilities
+Currently, there are no known bugs or issues. If you encounter any problems, please report them on our [GitHub Issues](https://github.com/suryaDheeraj0/apollo-capitals/issues) page.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+## Contact Information
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+For any questions, feedback, or suggestions, please contact us at:
+
+- **Email:** 
+Venkateshkalamata93@gmail.com
+suryadheeraj7@gmail.com
+
+Thank you for using Apollo Capitals!
+Feel free to modify the content to better suit your preferences!

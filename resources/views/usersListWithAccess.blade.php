@@ -36,6 +36,11 @@
     </style>
 </head>
 <body>
+    @if(session('message'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('message') }}
+    </div>
+@endif
     <h1>Search Users</h1>
 
     <!-- Search Form -->
@@ -76,6 +81,7 @@
                         <th>Email</th>
                         <th>Role</th>
                         <th>Badge</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,6 +96,13 @@
                                     {{ $user->role }}
                                 </span>
                             </td>
+                            <td>
+                                <form action="{{route('delete-user', $user->id)}}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                     @empty
                         <tr>
@@ -98,6 +111,9 @@
                     @endforelse
                 </tbody>
             </table>
+            <div>
+                <a href="{{route('admin_dashboard')}}" class="btn btn-danger">Back</a>
+            </div>
         </div>
     </div>
     <!-- Pagination Links -->

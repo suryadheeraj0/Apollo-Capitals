@@ -68,4 +68,14 @@ class User extends Authenticatable
             }
         }) ;
     }
+
+    public function tasks(){
+        return $this->hasMany(Task::class);
+    }
+    public function appointements(){
+        return $this->hasMany(Appointment::class);
+    }
+    public function customers(){
+        return $this->hasMany(Customer::class);
+    }
 }
