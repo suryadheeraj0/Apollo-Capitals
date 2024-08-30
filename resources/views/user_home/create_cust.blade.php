@@ -74,6 +74,9 @@
                                                 <div class="btn-group">
                                                     <a href='{{ route('edit_customer', $customer->id) }}'
                                                         class="btn btn-primary btn-sm">Edit</a>
+                                                        <br>
+                                                        <a href='{{ route('view-customer', $customer->id) }}'
+                                                            class="btn btn-success btn-sm">View Customer</a>
                                                     <form action='{{ route('delete_customer', $customer->id) }}'
                                                         method='POST'>
                                                         @csrf

@@ -127,6 +127,10 @@
                     onclick="toggleSubMenu('admin-panel')"><i>Your Profile</i></a>
             </li>
             @endrole
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('recently-viewed-customers') }}"
+                    onclick="toggleSubMenu('admin-panel')"><i>Recently viewed customers</i></a>
+            </li>
         </ul>
     </div>
  

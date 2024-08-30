@@ -238,6 +238,7 @@ Route::middleware(['auth', 'otp.verified'])->group(function(){
     Route::get('edit-task-form-admin/{taskId}', [AdminTaskController::class, 'showEditForm'])->name('edit-task-form-admin') ;
     Route::put('update-task-for-admin/{taskId}', [AdminTaskController::class, 'updateTask'])->name('update-task-for-admin') ;
     Route::delete('delete-task/{taskId}', [AdminTaskController::class, 'deleteTask'])->name('delete-task') ;
+    
 
     //Routes for show activity logs 
 
@@ -255,5 +256,6 @@ Route::middleware(['auth', 'otp.verified'])->group(function(){
     
     //routes for search customers for users
     Route::get('users-customers-results', [ShowUserManagement::class, 'searchresultsforcreatecust'])->name('usersCustomers.results') ;
-
+    Route::get('view-customer/{customerId}', [AdminTaskController::class, 'viewCustomer'])->name('view-customer');
+    Route::get('recently-viewed-customers', [AdminTaskController::class, 'recentlyViewedCustomers'])->name('recently-viewed-customers') ;
 }) ;

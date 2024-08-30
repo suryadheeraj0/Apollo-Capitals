@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\Customer;
+use App\Models\RecentlyViewedCustomer;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -115,6 +117,41 @@ class AdminTaskController extends Controller
         ]) ;
 
         return redirect()->back()->with(['success' => 'Task Deleted Successfully!']) ;
+    }
+
+
+    public function viewCustomer(Request $request, $id){
+        $customer = Customer::findOrFail($id) ;
+
+        $is_email_existed = RecentlyViewedCustomer::where('email', $customer->email)->first() ;
+
+        if(!$is_email_existed){
+            $recentlyViewedCustomers = RecentlyViewedCustomer::create([
+                'user_id' => $customer->user_id,
+                'name' => $customer->name,
+                'email' => $customer->email,
+                'phone_number' => $customer->phone_number 
+            ]) ;
+        }else{
+            $is_email_existed->created_at = now() ;
+            $is_email_existed->save() ;
+        }
+        if(auth()->user()->role === 'Admin'){
+            return view('customer_detailed_view_for_admin', compact('customer')) ;
+        }
+        return view('customer_detailed_view_for_user', compact('customer')) ;
+    }
+
+
+    public function recentlyViewedCustomers(Request $request) {
+
+        $recentlyViewedCustomers = RecentlyViewedCustomer::where('created_at', '<', now()->subHours(3))->get() ;
+        foreach($recentlyViewedCustomers as $customer) {
+            $customer->delete() ;
+        }
+
+        $recentlyViewedCustomers = RecentlyViewedCustomer::paginate(5) ;
+        return view('recently_viewed_customers', compact('recentlyViewedCustomers')) ;
     }
 
 

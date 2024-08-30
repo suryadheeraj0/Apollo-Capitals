@@ -33,7 +33,7 @@
                                     @method('GET')
                                     <button type="submit" class="btn btn-primary btn-sm">Edit</button>
                                 </form>
-
+                                <a href="{{route('view-customer', $customer->id)}}">View customer</a>
                             </div>
                         </div>
                     </div>
