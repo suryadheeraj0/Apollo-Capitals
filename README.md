@@ -61,25 +61,25 @@ Follow these steps to set up Apollo Capitals on your local machine:
    Update your database settings in `.env`:
 
 
-   DB_CONNECTION=mysql
-   DB_HOST=127.0.0.1
-   DB_PORT=3306
-   DB_DATABASE=your_database
-   DB_USERNAME=your_username
-   DB_PASSWORD=your_password
+   DB_CONNECTION= "{{database}}"
+   DB_HOST= "{{127.0.0.1}}"
+   DB_PORT= "{{3306}}"
+   DB_DATABASE= your_database
+   DB_USERNAME= your_username
+   DB_PASSWORD= your_password
  
 
    Set up your mail configuration (using Gmail as an example):
 
 
-   MAIL_MAILER=smtp
-   MAIL_HOST=smtp.gmail.com
-   MAIL_PORT=587
-   MAIL_USERNAME=your_gmail_username
-   MAIL_PASSWORD=your_gmail_password
-   MAIL_ENCRYPTION=tls
-   MAIL_FROM_ADDRESS=your_email@example.com
-   MAIL_FROM_NAME="${APP_NAME}"
+   MAIL_MAILER= {{smtp}}
+   MAIL_HOST= {{smtp.gmail.com}}
+   MAIL_PORT= {{587}}
+   MAIL_USERNAME= your_gmail_username
+   MAIL_PASSWORD= your_gmail_password
+   MAIL_ENCRYPTION= tls
+   MAIL_FROM_ADDRESS= your_email@example.com
+   MAIL_FROM_NAME= "${APP_NAME}"
 
 
 4. **Run Migrations and Seed the Database:**
@@ -151,7 +151,7 @@ Currently, there are no known bugs or issues. If you encounter any problems, ple
 For any questions, feedback, or suggestions, please contact us at:
 
 - **Email:** 
-Venkateshkalamata93@gmail.com
+Venkateshkalamata93@gmail.com,
 suryadheeraj7@gmail.com
 
 Thank you for using Apollo Capitals!
