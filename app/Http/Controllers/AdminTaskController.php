@@ -123,11 +123,13 @@ class AdminTaskController extends Controller
     public function viewCustomer(Request $request, $id){
         $customer = Customer::findOrFail($id) ;
 
-        $is_email_existed = RecentlyViewedCustomer::where('email', $customer->email)->first() ;
+        $is_email_existed = RecentlyViewedCustomer::where('email', $customer->email)
+        ->where('user_id', auth()->user()->id)
+        ->first() ;
 
         if(!$is_email_existed){
             $recentlyViewedCustomers = RecentlyViewedCustomer::create([
-                'user_id' => $customer->user_id,
+                'user_id' => auth()->user()->id,
                 'name' => $customer->name,
                 'email' => $customer->email,
                 'phone_number' => $customer->phone_number 
@@ -145,12 +147,18 @@ class AdminTaskController extends Controller
 
     public function recentlyViewedCustomers(Request $request) {
 
-        $recentlyViewedCustomers = RecentlyViewedCustomer::where('created_at', '<', now()->subHours(3))->get() ;
+        $recentlyViewedCustomers = RecentlyViewedCustomer::where('created_at', '<', now()->subHours(3))
+        ->where('user_id', '=', auth()->user()->id)
+        ->get() ;
         foreach($recentlyViewedCustomers as $customer) {
             $customer->delete() ;
         }
-
-        $recentlyViewedCustomers = RecentlyViewedCustomer::paginate(5) ;
+        
+        $recentlyViewedCustomers = RecentlyViewedCustomer::where('user_id', auth()->user()->id)->paginate(3) ;
+        if('Admin' === auth()->user()->role) {
+            $recentlyViewedCustomers = RecentlyViewedCustomer::paginate(3) ;
+            return view('recently_viewed_customers', compact('recentlyViewedCustomers')) ;
+        }
         return view('recently_viewed_customers', compact('recentlyViewedCustomers')) ;
     }
 

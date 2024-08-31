@@ -30,7 +30,7 @@
             @if (auth()->user()->role === "Admin")
                 <a href="{{route('view-customers-for-admin')}}" class="btn-btn-danger">Back</a>
             @else
-                <a href="{{route('create_cust')}}" class="btn-btn-danger">Back</a>
+                <a href="{{route('create_cust1')}}" class="btn-btn-danger">Back</a>
             @endif
         </form>
     </div>

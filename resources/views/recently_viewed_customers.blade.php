@@ -23,6 +23,9 @@
                     <a href="" class="list-group-item list-group-item-action">
                         <h5 class="mb-1">{{ $customer->name }}</h5>
                         <p class="mb-1">Email: {{ $customer->email }}</p>
+                        @if (auth()->user()->role === 'Admin')
+                        <p>viewed By: {{ $customer->user->name }}</p>
+                        @endif
                         <small>Last viewed: {{ $customer->created_at->format('F j, Y, g:i a') }}</small>
                     </a>
                 @endforeach

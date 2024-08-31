@@ -17,7 +17,6 @@ class StoreUserManagement extends Controller
             'description' => 'nullable|string|max:255',
             'due_date' => 'required|date',
             'priority' => 'required|string',
-            'status' => 'required|string',
         ]);
         $task=new Task();
         $task->task=$request->task;
@@ -25,7 +24,7 @@ class StoreUserManagement extends Controller
         $task->description=$request->description;
         $task->due_date_time=$request->due_date;
         $task->priority=$request->priority;
-        $task->status=$request->status;
+        $task->status=1;
         $task->assigned_to=0;
         $task->save();
  
@@ -100,22 +99,13 @@ class StoreUserManagement extends Controller
     {
         // Validate the request data
         $request->validate([
-            'task' => 'required|string|max:140',
-            'description' => 'nullable|string|max:255',
-            'due_date_time' => 'required|date',
-            'priority' => 'required|string',
             'status' => 'required|string',
-            'assign_to' => 'nullable|exists:users,id',
         ]);
      
         $task = Task::findOrFail($id);
         $currentUser = auth()->user();
-        $task->task = $request->task;
-        $task->description = $request->description;
-        $task->due_date_time = $request->due_date_time;
-        $task->priority = $request->priority;
         $task->status = $request->status;
-        if ($request->assign_to !== 'None' && $request->assign_to) {
+        /*if ($request->assign_to !== 'None' && $request->assign_to) {
             $assignedUser = User::where('id', $request->assign_to)
                                 ->where('role', 'user')
                                 ->where('id', '!=', $currentUser->id)
@@ -128,11 +118,11 @@ class StoreUserManagement extends Controller
         } else {
             $task->user_id = $currentUser->id;
             $task->assigned_to = 0;
-        }
+        }*/
      
         $task->save();
      
-        return redirect()->route('show.index')->with('success', 'Task updated and reassigned successfully!');
+        return redirect()->route('show.index')->with('success', 'Task updated successfully!');
     }
      
  
@@ -152,7 +142,6 @@ class StoreUserManagement extends Controller
         'end_date' => 'required|date|after_or_equal:start_date',
         'location' => 'nullable|string|max:255',
         'attendees' => 'nullable|string',
-        'recurrence' => 'nullable|string',
         'customer_id' => 'required|exists:customers,id',
         'task_id' => 'nullable|exists:tasks,id',
        ]);
@@ -166,7 +155,6 @@ class StoreUserManagement extends Controller
         $appointment->end_date = $validatedData['end_date'];
         $appointment->location = $validatedData['location'];
         $appointment->attendees = $validatedData['attendees'];
-        $appointment->recurrence = $validatedData['recurrence'];
         $appointment->customer_id = $validatedData['customer_id'];
         $appointment->task_id = $validatedData['task_id'];
  
@@ -183,7 +171,6 @@ class StoreUserManagement extends Controller
         $appointment->end_date = $request->end_date;
         $appointment->location = $request->location;
         $appointment->attendees = $request->attendees;
-        $appointment->recurrence = $request->recurrence;
         $appointment->customer_id = $request->customer_id;
         $appointment->task_id = $request->task_id;
  
@@ -204,7 +191,7 @@ class StoreUserManagement extends Controller
         $customer->email=$request->email;
         $customer->phone_number=$request->phone_number;
         $customer->save();
-        return redirect()->back()->with(['message' => 'Task Updated Successfully!']) ;
+        return redirect()->back()->with(['message' => 'Customer details Updated Successfully!']) ;
     }
     public function delete_customer(Request $request,string $id){
         $customer=Customer::findOrFail($id);

@@ -10,7 +10,6 @@
                     <th>Start Date</th>
                     <th>End Date</th>
                     <th>Attendees</th>
-                    <th>Recurrence</th>
                     <th>Associated Task</th>
                     <th>Assigned Customer</th>
                     <th>Actions</th>
@@ -23,7 +22,6 @@
                         <td>{{ $appointment->start_date }}</td>
                         <td>{{ $appointment->end_date }}</td>
                         <td>{{ $appointment->attendees }}</td>
-                        <td>{{ $appointment->recurrence }}</td>
                         <td>
                             @if ($appointment->task)
                                 {{ $appointment->task->task }}

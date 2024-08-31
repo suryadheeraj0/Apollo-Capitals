@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('recently_viewed_customers', function (Blueprint $table) {
+        Schema::create('new_leads', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('phone_number');
+            $table->integer('lead_status') ;
             $table->string('company')->nullable();
-            $table->text('notes')->nullable();
+            $table->text('address')->nullable();
+            $table->unsignedBigInteger('task_id')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('recently_viewed_customers');
+        Schema::dropIfExists('new_leads');
     }
 };

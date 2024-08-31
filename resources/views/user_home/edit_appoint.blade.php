@@ -1,6 +1,13 @@
 @extends('layouts.master')
 @section('content')
     <div class="container mt-4">
+        <div>
+            @if ($errors->any())
+                @foreach ($errors as $error)
+                    {{$error}}
+                @endforeach
+            @endif
+        </div>
         <h1>Edit the Appointment</h1>
  
         <form id="appointmentForm" action="{{ route('update_appointment', $appointment->id) }}" method="POST">
@@ -17,7 +24,7 @@
             <div class="row mb-3">
                 <label for="description" class="col-sm-2 col-form-label">Description</label>
                 <div class="col-sm-10">
-                    <textarea class="form-control" id="description" name="description"></textarea>
+                    <textarea class="form-control" id="description" name="description" value='{{$appointment->description}}'>{{$appointment->description}}</textarea>
                 </div>
             </div>
  
@@ -53,18 +60,6 @@
                 </div>
             </div>
  
-            <div class="row mb-3">
-                <label for="recurrence" class="col-sm-2 col-form-label">Recurrence</label>
-                <div class="col-sm-10">
-                    <select class="form-select" id="recurrence" name="recurrence">
-                        <option value="none">{{ $appointment->recurrence }}</option>
-                        <option value="daily">Daily</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="monthly">Monthly</option>
-                        <option value="custom">Custom</option>
-                    </select>
-                </div>
-            </div>
  
             <div class="row mb-3">
                 <label for="customer_id" class="col-sm-2 col-form-label">Customer</label>
@@ -89,7 +84,7 @@
                     </select>
                 </div>
             </div>
-            <button type="submit" id='add-customer-form' class="btn btn-primary">Create Appointment
+            <button type="submit" id='add-customer-form' class="btn btn-primary">Edit Appointment
             </button>
         </form>
         <div class="mt-3">

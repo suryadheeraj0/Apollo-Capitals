@@ -13,4 +13,9 @@ class RecentlyViewedCustomer extends Model
     protected $fillable = [
         'user_id', 'name', 'email', 'phone_number', 'company',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

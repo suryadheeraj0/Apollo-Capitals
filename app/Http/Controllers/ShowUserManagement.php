@@ -48,11 +48,11 @@ class ShowUserManagement extends Controller
     
         // Apply date range filter if present
         if ($dateFrom && $dateTo) {
-            $tasks->whereBetween('created_at', [$dateFrom, $dateTo]);
+            $tasks->whereBetween('due_date_time', [$dateFrom, $dateTo]);
         } elseif ($dateFrom) {
-            $tasks->whereDate('created_at', '>=', $dateFrom);
+            $tasks->whereDate('due_date_time', '>=', $dateFrom);
         } elseif ($dateTo) {
-            $tasks->whereDate('created_at', '<=', $dateTo);
+            $tasks->whereDate('due_date_time', '<=', $dateTo);
         }
     
     
@@ -66,6 +66,7 @@ class ShowUserManagement extends Controller
             $tasks->where('status', $status);
         }
         $tasks->orderBy($sortBy, $sortDirection);
+        $tasks->where('user_id', auth()->user()->id) ;
         $tasks = $tasks->paginate(10); 
 
         return view('user_home.user_tasks', compact('tasks', 'sortBy', 'sortDirection')) ;
@@ -91,7 +92,6 @@ class ShowUserManagement extends Controller
         $appointment=Appointment::all();
         return view('user_home.create_cust_appoint',compact('user','appointment'));
     }
-
 
 
     public function create_cust(){
@@ -155,6 +155,7 @@ class ShowUserManagement extends Controller
         $customer=Customer::all();
         return view('user_home.create_cust_data',compact('customer'));
     }
+
     public function create_customer_appointment(){
         $customers=Customer::all();
         $tasks=Task::all();

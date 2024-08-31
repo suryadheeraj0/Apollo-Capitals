@@ -111,20 +111,6 @@
                 <a class="nav-link" href="{{ route('profile.edit') }}"
                     onclick="toggleSubMenu('admin-panel')"><i>Your Profile</i></a>
             </li>
-
-            @can('show leads')
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('leads.index') }}"
-                    onclick="toggleSubMenu('admin-panel')"><i>Show Leads</i></a>
-            </li> 
-            @endcan
-           @can('create new lead')
-           <li class="nav-item">
-            <a class="nav-link" href="{{ route('create-newlead') }}"
-                onclick="toggleSubMenu('admin-panel')"><i>Create New Lead</i></a>
-            </li>  
-           @endcan
-        
             @endrole
             @role(\App\Enums\Roles::Admin)
             <!-- Admin Panel Section -->
@@ -148,14 +134,7 @@
         </ul>
     </div>
  
-    <div class="main-content">
-        <h1 class="text-center"><i><strong>Home Page</strong></i></h1>
-        <p class="text-center"><i>Hi {{auth()->user()->name}}, welcome to this page!</i></p>
-        <div class="scrolling-text text-center">
-            <span><i>Here you can manage different sections of the application.</i></span>
-        </div>
-    </div>
- 
+
     <script>
         function toggleSubMenu(menuId) {
             var subMenu = document.getElementById(menuId);

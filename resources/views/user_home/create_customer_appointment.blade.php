@@ -1,6 +1,13 @@
 @extends('layouts.master')
 @section('content')
     <div class="container mt-4">
+        <div>
+            @if ($errors->any())
+                @foreach ($errors as $error)
+                    {{$error}}
+                @endforeach
+            @endif
+        </div>
         <h1>Create the Appointment</h1>
  
         <form id="appointmentForm" action="{{ route('store_customer_appointment') }}" method="POST">
@@ -47,18 +54,7 @@
                 </div>
             </div>
  
-            <div class="row mb-3">
-                <label for="recurrence" class="col-sm-2 col-form-label">Recurrence</label>
-                <div class="col-sm-10">
-                    <select class="form-select" id="recurrence" name="recurrence">
-                        <option value="none">None</option>
-                        <option value="daily">Daily</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="monthly">Monthly</option>
-                        <option value="custom">Custom</option>
-                    </select>
-                </div>
-            </div>
+           
  
             <div class="row mb-3">
                 <label for="customer_id" class="col-sm-2 col-form-label">Customer</label>

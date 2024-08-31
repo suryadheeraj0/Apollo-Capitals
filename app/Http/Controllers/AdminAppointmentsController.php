@@ -71,7 +71,7 @@ class AdminAppointmentsController extends Controller
             'end_date' => 'required|date|after_or_equal:start_date',
             'location' => 'required|string|max:255',
             'attendees' => 'required|string|max:255',
-            'recurrence' => 'required',
+         
         ]);
     
         $appointment = Appointment::findOrFail($id);
@@ -81,7 +81,6 @@ class AdminAppointmentsController extends Controller
         $appointment->end_date = $request->end_date ;
         $appointment->location = $request->location ;
         $appointment->attendees = $request->attendees ;
-        $appointment->recurrence = $request->recurrence ;
         $appointment->save() ;
 
         //activity log

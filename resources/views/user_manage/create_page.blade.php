@@ -59,21 +59,7 @@
                 </div>
             </div>
  
-            <div class="row mb-3">
-                <label for="status" class="col-sm-2 col-form-label">Status</label>
-                <div class="col-sm-10">
-                    <select class="form-select @error('status') is-invalid @enderror" id="status" name="status"
-                        required>
-                        <option value="">Select Status</option>
-                        <option value="1">Not Started</option>
-                        <option value="2">In Progress</option>
-                        <option value="3">Completed</option>
-                    </select>
-                    @error('status')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
+           
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
         <div>

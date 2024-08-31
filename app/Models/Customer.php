@@ -9,6 +9,13 @@ use App\Models\Appointment;
 class Customer extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id', 
+        'name', 
+        'email', 
+        'phone_number',  'address'
+    ] ;
  
     public function user(){
         return $this->belongsTo(User::class);

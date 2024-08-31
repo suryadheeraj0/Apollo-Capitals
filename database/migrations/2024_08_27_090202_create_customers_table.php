@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone_number');
             $table->string('company')->nullable();
-            $table->text('notes')->nullable();
+            $table->text('address')->nullable();
             $table->unsignedBigInteger('task_id')->nullable();
             $table->timestamps();
         });

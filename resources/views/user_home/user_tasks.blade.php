@@ -2,7 +2,11 @@
  
 @section('content')
     <div class="container mt-4">
-
+            @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+            @endif
 
 
         <!-- Search Form -->
@@ -90,6 +94,7 @@
                         <thead>
                             <tr>
                                 <th>Assigned Task</th>
+                                <th>Task Description</th>
                                 <th>Due Date</th>
                                 <th>Priority</th>
                                 <th>Status</th>
@@ -100,6 +105,7 @@
                             @foreach ($tasks as $task)
                                 <tr>
                                     <td>{{ $task->task }}</td>
+                                    <td>{{ $task->description }}</td>
                                     <td>{{ $task->due_date_time }}</td>
                                     <td>
                                         @if ($task->priority === "1")

@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\CreateNewLeadController;
 use App\Http\Controllers\DeleteController;
 use App\Http\Controllers\HomeDashboardController;
 use App\Http\Controllers\OtpController;
@@ -258,4 +259,13 @@ Route::middleware(['auth', 'otp.verified'])->group(function(){
     Route::get('users-customers-results', [ShowUserManagement::class, 'searchresultsforcreatecust'])->name('usersCustomers.results') ;
     Route::get('view-customer/{customerId}', [AdminTaskController::class, 'viewCustomer'])->name('view-customer');
     Route::get('recently-viewed-customers', [AdminTaskController::class, 'recentlyViewedCustomers'])->name('recently-viewed-customers') ;
+
+
+    //Create a New Lead 
+    Route::get('show-all-leads', [CreateNewLeadController::class, 'showAllLeads'])->name('leads.index') ;
+    Route::get('create-a-newlead', [CreateNewLeadController::class, 'showCreateLeadForm'])->name('create-newlead') ;
+    Route::post('store-newlead', [CreateNewLeadController::class, 'storeLeadDetails'])->name('store-lead') ;
+    Route::get('show-edit-from/{leadId}', [CreateNewLeadController::class, 'showEditForm'])->name('leads.edit') ;
+    Route::put('update-lead/{leadId}', [CreateNewLeadController::class, 'updateLead'])->name('leads.update') ;
+    Route::delete('delete-lead/{leadId}', [CreateNewLeadController::class, 'destroyLead'])->name('leads.destroy') ;
 }) ;

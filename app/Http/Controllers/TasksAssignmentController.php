@@ -29,7 +29,6 @@ class TasksAssignmentController extends Controller
         'description' => 'required',
         'due_date' => 'required',
         'priority' => 'required',
-        'status' => 'required',
         ]);
  
         $user = User::findOrFail($id);
@@ -39,7 +38,7 @@ class TasksAssignmentController extends Controller
         $task->task = $request->task;
         $task->due_date_time = $request->due_date;
         $task->priority = $request->priority;
-        $task->status = $request->status;
+        $task->status = 1;
         $task->description = $request->description;
 
         $task->save();

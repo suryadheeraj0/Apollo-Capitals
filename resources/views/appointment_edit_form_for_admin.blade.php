@@ -56,16 +56,7 @@
             <label for="attendees">Attendees</label>
             <input type="text" class="form-control" id="attendees" name="attendees" value="{{ old('attendees', $appointment->attendees) }}">
         </div>
-        
-        <div class="form-group">
-            <label for="recurrence">Recurrence</label>
-            <select class="form-control" id="recurrence" name="recurrence">
-                <option value="" {{ old('recurrence', $appointment->recurrence) == '' ? 'selected' : '' }}>None</option>
-                <option value="Daily" {{ old('recurrence', $appointment->recurrence) == 'Daily' ? 'selected' : '' }}>Daily</option>
-                <option value="Weekly" {{ old('recurrence', $appointment->recurrence) == 'Weekly' ? 'selected' : '' }}>Weekly</option>
-                <option value="Monthly" {{ old('recurrence', $appointment->recurrence) == 'Monthly' ? 'selected' : '' }}>Monthly</option>
-            </select>
-        </div>
+       
         
         <button type="submit" class="btn btn-primary">Update Appointment</button>
         <a href="{{ route('view-appointments-for-admin') }}" class="btn btn-secondary">Cancel</a>
