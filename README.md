@@ -1,6 +1,6 @@
 # Apollo Capitals
 
-**Apollo Capitals** is a CRM (Customer Relationship Management) application tailored for financing businesses. It provides comprehensive management of user roles, customer data, tasks, appointments, and user activities. Built with robust technologies like PHP, Laravel, and MySQL, Apollo Capitals offers advanced features, including role-based access control and multi-factor authentication (MFA), ensuring a secure and user-friendly experience.
+**Apollo Capitals** is a CRM (Customer Relationship Management). It provides comprehensive management of user roles, customer data, tasks, appointments, and user activities. Built with robust technologies like PHP, Laravel, and MySQL, Apollo Capitals offers advanced features, including role-based access control and multi-factor authentication (MFA), ensuring a secure and user-friendly experience.
 
 ## Table of Contents
 
