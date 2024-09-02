@@ -13,6 +13,8 @@ class PermissionController extends Controller
      *
      * @return \Illuminate\View\View
      */
+
+    //returns a form to create a new permission
     public function create()
     {
         return view('permissions_create');
@@ -24,6 +26,8 @@ class PermissionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
+
+     //validates the permission and stores in permissions model
     public function store(Request $request)
     {
         $request->validate([

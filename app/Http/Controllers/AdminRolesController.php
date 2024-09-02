@@ -16,7 +16,7 @@ class AdminRolesController extends Controller
      */
     public function index()
     {
-        //
+        //showing all existing roles
         $role=Role::all();
         info($role) ;
         return view('admin.index',compact('role'));
@@ -27,7 +27,7 @@ class AdminRolesController extends Controller
      */
     public function create()
     {
-        //
+        //form for creating a new role
         $user=auth()->user();
         $permissions = Permission::all() ;
         return view('admin.create',compact('user', 'permissions'));
@@ -74,7 +74,7 @@ class AdminRolesController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        //edit form to edit permissions
         $role=Role::findOrFail($id);
         $permissions = Permission::all() ;
         return view('admin.edit',compact('role', 'permissions'));
@@ -85,6 +85,7 @@ class AdminRolesController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        //updating the permissions
         $role=Role::findOrFail($id);
 
         $role->syncPermissions($request->permissions);
@@ -108,7 +109,7 @@ class AdminRolesController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        //deleting the role
         $role=Role::findOrFail($id);
         $role->delete();
 

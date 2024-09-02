@@ -124,6 +124,7 @@ class StoreUserManagement extends Controller
      
         return redirect()->route('show.index')->with('success', 'Task updated successfully!');
     }
+    
      
  
     public function delete_task(string $id){
@@ -131,6 +132,7 @@ class StoreUserManagement extends Controller
         $task->delete();
         return redirect()->route('show.index');
     }
+
  
     public function create_the_appointment(Request $request)
     {
@@ -178,6 +180,8 @@ class StoreUserManagement extends Controller
  
         return redirect()->route('show_customer_appointment');
     }
+
+
     public function delete_the_appointment(string $id)
     {
         $appointment=Appointment::findOrFail($id);
@@ -193,6 +197,8 @@ class StoreUserManagement extends Controller
         $customer->save();
         return redirect()->back()->with(['message' => 'Customer details Updated Successfully!']) ;
     }
+
+
     public function delete_customer(Request $request,string $id){
         $customer=Customer::findOrFail($id);
         $customer->delete();

@@ -13,10 +13,10 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminTaskController extends Controller
 {
+    //returns a view all the tasks for admin
     public function showTasks(User $user){
 
         $this->authorize('viewTasksForAdmin', $user) ;
-
 
         $tasks = Task::paginate(3) ;
         $sortBy = 'created_at' ;
@@ -24,8 +24,10 @@ class AdminTaskController extends Controller
         return view('view_tasks_for_admin', compact('tasks', 'sortBy', 'sortDirection')) ;
     }
     
+    //returns a view with search results
     public function showTasksSearchResults(Request $request, User $user) {
 
+        //checks the permissions based on user model, policy
         $this->authorize('viewTasksForAdmin', $user) ;
     
         $query = $request->input('query');
@@ -77,11 +79,15 @@ class AdminTaskController extends Controller
         return view('view_tasks_for_admin', compact('tasks', 'sortBy', 'sortDirection'));
     }
 
+
+    //returns a view to edit task form
     public function showEditForm(Request $request, $id) {
         $task = Task::findOrFail($id) ; 
         return view('edit_task_view_for_admin', compact('task')) ;
     }
 
+
+    //update the task 
     public function updateTask(Request $request, $id) {
         $task = Task::findOrFail($id) ; 
 
@@ -101,6 +107,7 @@ class AdminTaskController extends Controller
         return redirect()->route('view-tasks-for-admin')->with(['success' => 'Task Updated Successfully!']) ;
     }
 
+    //deletes the task
     public function deleteTask(Request $request, $id) {
         $task = Task::findOrFail($id) ;
         $task->delete() ;
@@ -120,6 +127,11 @@ class AdminTaskController extends Controller
     }
 
 
+    /*
+    *when we click on the view task it captures the user and customer information
+    and it stores in database and it returns the view based on the roles
+    *
+    */
     public function viewCustomer(Request $request, $id){
         $customer = Customer::findOrFail($id) ;
 
@@ -145,6 +157,10 @@ class AdminTaskController extends Controller
     }
 
 
+    /*it shows recently viewed customers to the specific user and deletes the customers in
+    the recently viewed customers model if it is older then 3hrs and it shows the stuff based on
+    the roles
+    */
     public function recentlyViewedCustomers(Request $request) {
 
         $recentlyViewedCustomers = RecentlyViewedCustomer::where('created_at', '<', now()->subHours(3))

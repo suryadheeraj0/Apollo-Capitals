@@ -12,19 +12,27 @@ use Illuminate\Support\Facades\Auth;
 
 class OtpController extends Controller
 {
+    
     protected $otpService;
 
+    //passing the otpservice class
     public function __construct(OtpService $otpService)
     {
         $this->otpService = $otpService;
     }
+
+
+    //returns the two factor challenge view
     public function show()
     {
         return view('auth.otp'); // Create this view
     }
 
+
+
+    //verifies the otp and redirects based on the results
     public function verify(Request $request)
-{
+    {
     $request->validate([
         'otp' => 'required',
     ]);
@@ -36,9 +44,12 @@ class OtpController extends Controller
     }
 
     return redirect()->back()->withErrors(['otp' => 'Invalid or expired OTP']);
-}
-public function requestNewOtp(Request $request)
-{
+    }
+
+
+    //requests new otp and sends it to the user
+    public function requestNewOtp(Request $request)
+    {
     $user = Auth::user();
     $otp = $this->otpService->generateOtp($user->id);
     //$user->notify(new OtpNotification($otp));
@@ -47,5 +58,5 @@ public function requestNewOtp(Request $request)
 
     //return response()->json(['message' => 'New OTP has been sent to your email.']);
     return redirect()->back() ;//->with('message', 'New OTP has been sent to your email.') ;
-}
+    }
 }

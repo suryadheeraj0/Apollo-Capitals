@@ -45,8 +45,8 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ $appointment->title }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">
-                            Customer ID: {{ $appointment->customer_id }}<br>
-                            User ID: {{ $appointment->user_id }}
+                            Customer Name: {{ $appointment->customer->name }}<br>
+                            User Name: {{ $appointment->user->name }}
                         </h6>
                         <p class="card-text"><strong>Description:</strong> {{ $appointment->description }}</p>
                         <p class="card-text"><strong>Start Date:</strong> {{ \Carbon\Carbon::parse($appointment->start_date)->format('d M Y, H:i') }}</p>

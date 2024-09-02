@@ -61,8 +61,6 @@ class ProfileController extends Controller
 
 
     //mfa enable and disable 
-
-
     public function enableMfa(Request $request)
     {
         $user = Auth::user();

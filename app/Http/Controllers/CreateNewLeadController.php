@@ -9,16 +9,20 @@ use Illuminate\Http\Request;
 
 class CreateNewLeadController extends Controller
 {
+
+    //returns a view to show all the leads and it is user specific
     public function showAllLeads() {
         $leads = NewLead::where('user_id', auth()->user()->id) ;
         $leads = $leads->paginate(3) ;
         return view('show_all_leads_page', compact('leads')) ;
     }
 
+    //returns a from to create a new lead
     public function showCreateLeadForm() {
         return view('create_newlead_form') ;
     }
 
+    //stores and validates the newly created lead
     public function storeLeadDetails(Request $request) {
 
         $request->validate([
@@ -54,12 +58,13 @@ class CreateNewLeadController extends Controller
 
     }
 
+    //edit form for lead to update
     public function showEditForm(Request $request, $id) {
         $lead = NewLead::findOrFail($id) ;
         return view('show_lead_edit_form', compact('lead')) ;
     }
 
-
+    //updating the lead details
     public function updateLead(Request $request, $id) {
         $request->validate([
             'name' => 'required' ,
@@ -78,6 +83,7 @@ class CreateNewLeadController extends Controller
         
         $lead = NewLead::findOrFail($id) ; 
 
+        //if it is convert to customer we will add it to the customer model
         if($lead_status == '3') {
             Customer::create([
                 'user_id' => auth()->user()->id
@@ -99,6 +105,8 @@ class CreateNewLeadController extends Controller
         return redirect()->route('leads.index')->with('message', 'Lead Updated Successfully') ;
     }
 
+
+    //deletes the lead
     public function destroyLead(Request $request, $id) {
         $lead = NewLead::findOrFail($id) ;
         $lead->delete() ;

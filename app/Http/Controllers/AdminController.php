@@ -27,17 +27,23 @@ class AdminController extends Controller
     //showing admin dashboard
     public function showAdminPage(User $user) {
 
-
+        //checks either user have permission or not 
         $this->authorize('adminPageAccess', $user) ;
 
         return view('admin_dashboard');
     }
 
+    /* returns a form to create a new user and roles to 
+    make the dropdown dynamic when admin creates a new role
+    */
     public function createUser() {
         $roles = Role::all() ;
         return view('createUser', compact('roles')) ;
     }
 
+
+    /*stores the user details in database and validates the data
+    */
     public function store(UserValidationRequest $request) {
 
         $request->validated() ;
@@ -48,14 +54,17 @@ class AdminController extends Controller
 
         //return response()->json(['status' => true, 'data' => $data], 200) ;
 
+        //creating a password using helper function
         $dummyPassword = fake()->password(8, 20) ;
         $is_exists = User::where('email', '=', $userEmail)->first() ;
 
+        //handling sql unique constraint error
         if($is_exists) {
             return redirect()->back()->withErrors(
                 ['error' => 'User Already Exists!!.']);
         }
 
+        //creating new user
         $user = new User() ;
         $user->name = $userName ;
         $user->email = $userEmail ;
@@ -71,8 +80,10 @@ class AdminController extends Controller
     
        
         //Mail::send(new SendActivationEmail($name, $dummyPassword, $activationLink, $email)) ;
+        //event triggered 
         event(new UserCreated($name, $dummyPassword, $activationLink, $email)) ;
-        //$user = Auth::user();
+        
+        //capturing the activity
         ActivityLog::create([
             'user_id' => auth()->user()->id,
              'user_name' => auth()->user()->name,
@@ -82,6 +93,7 @@ class AdminController extends Controller
             'time' => now()
         ]) ;
 
+        //checking roles from dropdown and assigning role to user
         if($request->role === 'Admin') {
            $user = User::where('email', '=', $userEmail)->first() ;
            $user->assignRole('Admin') ;
@@ -100,12 +112,13 @@ class AdminController extends Controller
 
     }
 
-
+    //page for account activation for user this is old flow
     public function showAccountActivation() {
         return view('accountActivation') ;
     }
+    
 
-
+    //old flow
     public function usersDataWithAccess() {
         $user = User::all() ;
         return view('admin_dashboard', compact('user')) ;

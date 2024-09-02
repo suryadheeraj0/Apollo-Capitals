@@ -10,12 +10,15 @@ use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
+    //this is out of the application
     public function searchPage() {
         $posts = Post::paginate(10) ;
         $sortBy = 'created_at' ;
         $sortDirection = 'asc' ;
         return view('search', compact('posts', 'sortBy', 'sortDirection')) ;
     }
+
+    //this is out of the application
     public function  searchPostsWithComments(Request $request) {
         // Retrieve search query and filter inputs
     $query = $request->input('query');
@@ -71,6 +74,7 @@ class SearchController extends Controller
     }
 
 
+    //returns a view to admin for users list
     public function showUsersList() {
         $users = User::paginate(10) ;
         $sortBy = 'created_at' ;
@@ -78,6 +82,7 @@ class SearchController extends Controller
         return view('usersListWithAccess', compact('users', 'sortBy', 'sortDirection')) ;
     }
 
+    //returns a view to admin with search results
     public function searchUser(Request $request) {
         $query = $request->input('query');
         $dateFrom = $request->input('date_from');
@@ -116,7 +121,7 @@ class SearchController extends Controller
 
     }
 
-
+    //returns a view with search results for task creation to admin
     public function searchUserForTaskCreation(Request $request) {
         $query = $request->input('query');
         $dateFrom = $request->input('date_from');
@@ -155,6 +160,7 @@ class SearchController extends Controller
     }
 
 
+    //returns a view to admin for display the all customers
     public function showCustomersToAdmin() {
         $customers = Customer::paginate(5) ;
         $sortBy =  'created_at' ;

@@ -36,7 +36,7 @@
                 <label for="due_date" class="col-sm-2 col-form-label">Due Date and Time</label>
                 <div class="col-sm-10">
                     <input type="datetime-local" class="form-control @error('due_date') is-invalid @enderror" id="due_date"
-                        name="due_date" required>
+                        name="due_date" min="{{ now()->format('Y-m-d\TH:i') }}" required>
                     @error('due_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

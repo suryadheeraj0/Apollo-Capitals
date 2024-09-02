@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
  
 class HomeDashboardController extends Controller
 {
-    //
+    //returns user home dashboard
     public function index()
     {
         $user=auth()->user();

@@ -29,14 +29,14 @@
             <div class="row mb-3">
                 <label for="start_date" class="col-sm-2 col-form-label">Start Date and Time</label>
                 <div class="col-sm-10">
-                    <input type="datetime-local" class="form-control" id="start_date" name="start_date" required>
+                    <input type="datetime-local" class="form-control" id="start_date" name="start_date" min="{{ now()->format('Y-m-d\TH:i') }}" required>
                 </div>
             </div>
  
             <div class="row mb-3">
                 <label for="end_date" class="col-sm-2 col-form-label">End Date and Time</label>
                 <div class="col-sm-10">
-                    <input type="datetime-local" class="form-control" id="end_date" name="end_date" required>
+                    <input type="datetime-local" class="form-control" id="end_date" name="end_date" min="{{ now()->format('Y-m-d\TH:i') }}" required>
                 </div>
             </div>
  

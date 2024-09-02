@@ -11,8 +11,11 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminAppointmentsController extends Controller
 {
+
+    //returns the list of appointments to admin
     public function showAppointmentsForAdmin(User $user) {
 
+        //checks authroization model based policy
         $this->authorize('adminAppointmentsPageAccess', $user) ;
 
         $appointments = Appointment::paginate(3) ;
@@ -21,6 +24,7 @@ class AdminAppointmentsController extends Controller
         return view('admin_view_appointments_page', compact('appointments', 'sortBy', 'sortDirection')) ;
     }
 
+    //search results for list of appointments
     public function searchResultsForAppointments(Request $request) {
         $query = $request->input('query');
         $dateFrom = $request->input('date_from');
@@ -28,12 +32,12 @@ class AdminAppointmentsController extends Controller
         $sortBy = $request->input('sort_by', 'created_at'); // Default sorting by created_at
         $sortDirection = $request->input('sort_direction', 'desc'); // Default sorting direction
 
-
+        //applying the query to model
         $appointments = Appointment::query() ;
 
 
         if ($query) {
-            $users = $appointments->where(function ($q) use ($query) {
+            $appointments = $appointments->where(function ($q) use ($query) {
                 $q->where('title', 'LIKE', "%{$query}%")
                   ->orWhere('description', 'LIKE', "%{$query}%")
                   ->orWhere('attendees', ' LIKE', "%{$query}%") ;
@@ -43,11 +47,11 @@ class AdminAppointmentsController extends Controller
 
         // Apply date range filter if present
         if ($dateFrom && $dateTo) {
-            $appointments->whereBetween('created_at', [$dateFrom, $dateTo]);
+            $appointments->whereBetween('start_date', [$dateFrom, $dateTo]);
         } elseif ($dateFrom) {
-            $appointments->whereDate('created_at', '>=', $dateFrom);
+            $appointments->whereDate('start_date', '>=', $dateFrom);
         } elseif ($dateTo) {
-            $appointments->whereDate('created_at', '<=', $dateTo);
+            $appointments->whereDate('end_date', '<=', $dateTo);
         }
 
 
@@ -58,11 +62,13 @@ class AdminAppointmentsController extends Controller
         return view('admin_view_appointments_page', compact('appointments', 'sortBy', 'sortDirection'));
     }
 
+    //returns appointment edit form
     public function showAppointmentEditForm(Request $request, $id) {
         $appointment = Appointment::findOrFail($id) ;
         return view('appointment_edit_form_for_admin', compact('appointment')) ;
     }
 
+    //updates the appointments
     public function UpdateAppointmentForm(Request $request, $id) {
         $request->validate([
             'title' => 'required|string|max:255',
@@ -98,6 +104,7 @@ class AdminAppointmentsController extends Controller
     }
 
 
+    //deletes the appointments
     public function deleteAppointment(Request $request, $id) {
         $appointment = Appointment::findOrFail($id) ;
         $appointment->delete() ;

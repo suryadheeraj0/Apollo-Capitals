@@ -22,6 +22,7 @@ class ShowUserManagement extends Controller
         return view('user_home.user_tasks', compact('tasks', 'sortBy', 'sortDirection'));
     }
 
+
     //results for task assigned to user page
     public function indexSearchResults(Request $request) {
         $query = $request->input('query');
@@ -74,19 +75,23 @@ class ShowUserManagement extends Controller
     }
 
 
- 
+    //returns a view to create a new task for user
     public function create(Request $request, string $id)
     {
         $user=auth()->user();
         $customers=Customer::all();
         return view('user_home.task', compact('user','customers'));
     }
+
  
+    //retuns a view to show that create a appointment
     public function show_appoint(){
         $user=auth()->user();
         return view('user_home.cust_appoint',compact('user'));
     }
+
  
+    //old flow 
     public function create_appoint(){
         $user=auth()->user();
         $appointment=Appointment::all();
@@ -94,6 +99,7 @@ class ShowUserManagement extends Controller
     }
 
 
+    //which shows all the customers 
     public function create_cust(){
         $user=auth()->user();
         $customers=Customer::all();
@@ -150,12 +156,14 @@ class ShowUserManagement extends Controller
         return view('user_home.create_cust', compact('customers', 'sortBy', 'sortDirection')) ;
     }
 
-
+    //returns a form to create a new customer
     public function create_cust_data(){
         $customer=Customer::all();
         return view('user_home.create_cust_data',compact('customer'));
     }
 
+
+    //returns a form to create a appintment
     public function create_customer_appointment(){
         $customers=Customer::all();
         $tasks=Task::all();
@@ -163,22 +171,22 @@ class ShowUserManagement extends Controller
     }
 
 
-
+    //returns a view to show all the appointments
     public function show_appointments(){
         $user=auth()->user()->id;
         $appointments=Appointment::where('user_id', $user)->get() ;
         return view('user_home.show_appoint',compact('appointments'));
     }
 
-
-
-    
+    //returns a from to edit the appointment details
     public function edit_appointment(Request $request,string $id){
         $appointment=Appointment::findOrFail($id);
         $customers=Customer::all();
         $tasks=Task::all();
         return view('user_home.edit_appoint',compact('appointment','customers','tasks'));
     }
+
+    //returns a form to edit the customer details
     public function edit_customers(Request $request,string $id){
         $customer=Customer::findOrFail($id);
         return view('user_home.edit_customer',compact('customer'));

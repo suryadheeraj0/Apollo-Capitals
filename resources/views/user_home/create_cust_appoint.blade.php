@@ -33,4 +33,3 @@
     </div>
 @endsection
  
-has context menu

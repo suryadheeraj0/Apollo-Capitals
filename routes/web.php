@@ -45,7 +45,6 @@ use Spatie\Permission\Models\Role;
 
 
 //route for welcome page which is not protectd 
-
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
@@ -60,8 +59,10 @@ Route::get('/dashboard', function () {
 
 
 
-//Routes which are protected by auth middleware 
+//Routes which are protected by auth middleware and 2fa
 Route::middleware(['auth', 'otp.verified'])->group(function () {
+
+    //Routes to update password and update details and delete user account
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -69,13 +70,17 @@ Route::middleware(['auth', 'otp.verified'])->group(function () {
 
 
 Route::middleware(['auth'])->group(function () {
+
+    //two factor challenge routes
     Route::get('/otp/verify', [OtpController::class, 'show'])->name('otp.verify');
     Route::post('/otp/verify', [OtpController::class, 'verify']);
 
+    //request new otp route
     Route::post('/otp/request', [OtpController::class, 'requestNewOtp'])
     ->middleware('throttle:otp-request')
     ->name('otp.request');
 
+    //to enable and disable 2fa
     Route::post('/profile/enable-mfa', [ProfileController::class, 'enableMfa'])->name('profile.enableMfa');
     Route::post('/profile/disable-mfa', [ProfileController::class, 'disableMfa'])->name('profile.disableMfa');
 
@@ -104,25 +109,20 @@ require __DIR__.'/auth.php';
 
 Route::middleware(['auth', 'otp.verified'])->group(function(){
 
+    //routes which are out of the application, i used to practice for search algoritham
     Route::get('/get', [SearchController::class, 'searchPostsWithComments'])->name('posts.search') ;
-
     Route::get('/search-page', [SearchController::class, 'searchPage']) ;   
 
+
     //user management routes
-
     Route::get('create-user', [AdminController::class, 'createUser'])->name('createUser') ; 
-
     Route::post('store-user', [AdminController::class, 'store'])->name('storeUser') ;
-
     Route::get('account-activation', [AdminController::class, 'showAccountActivation'])->name('accountActivation') ;
-
     Route::post('store-activated-user', [AdminController::class, 'validateAndSaveUser'])->name('storeActivatedUser') ;
 
 
     //surya routes
-
     //Route::get('admi',[AdminController::class,'usersDataWithAccess'])->name('admi');
-
     Route::resource('roles-management', AdminRolesController::class)->names([
         'index' => 'roles.index',      // Route to list all tasks
     ]);
@@ -130,16 +130,12 @@ Route::middleware(['auth', 'otp.verified'])->group(function(){
 
 
     //Route for users list with thier access for admin 
-
     Route::get('users-list-with-access', [SearchController::class, 'showUsersList']) ;
     Route::get('users-list-with-access-filters', [SearchController::class, 'searchUser'])->name('users.search') ;
 
 
-
-
     //surya routes 
     Route::get('home', [HomeDashboardController::class, 'index'])->name('home');
- 
     Route::get('/show', [ShowUserManagement::class, 'index'])->name('show.index');
     Route::get('/show/create/{id}', [ShowUserManagement::class, 'create'])->name('show.create');
     Route::get('show_appoint', [ShowUserManagement::class, 'show_appoint'])->name('show_appoint');
@@ -147,7 +143,7 @@ Route::middleware(['auth', 'otp.verified'])->group(function(){
     Route::get('create_cust', [ShowUserManagement::class, 'create_cust'])->name('create_cust1');
     Route::get('create_cust_data', [ShowUserManagement::class, 'create_cust_data'])->name('create_cust_data1');
  
- 
+    //Routes which handles the tasks
     Route::get('/tasks', [TasksAssignmentController::class, 'index'])->name('tasks.index');
     Route::get('/tasks/create/{id}', [TasksAssignmentController::class, 'create'])->name('tasks.create');
     Route::post('/tasks/store/{id}', [TasksAssignmentController::class, 'store'])->name('tasks.store');
@@ -155,61 +151,46 @@ Route::middleware(['auth', 'otp.verified'])->group(function(){
     Route::get('/tasks/edit/{id}', [TasksAssignmentController::class, 'edit'])->name('tasks.edit');
     Route::put('/tasks/update/{id}', [TasksAssignmentController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/destroy/{id}', [TasksAssignmentController::class, 'destroy'])->name('tasks.destroy');
- 
- 
+
+    //routes which are related to customers
     Route::get('/customers/create', [StoreUserManagement::class, 'showCreateCustomerForm'])->name('create_cust_data');
     Route::get('/customers/create_data', [StoreUserManagement::class, 'showCustomers'])->name('create_cust');
     Route::post('/customers/store', [StoreUserManagement::class, 'create_cust'])->name('customers.store');
- 
     Route::post('tasks/create', [StoreUserManagement::class, 'create_task'])->name('store.create_task');
     Route::get('store/edit/{id}', [StoreUserManagement::class, 'edit_task'])->name('store.edit_task');
     Route::put('store/update/{id}', [StoreUserManagement::class, 'update_task'])->name('store.update_task');
- 
     Route::delete('store/delete/{id}',[StoreUserManagement::class,'delete_task'])->name('store.delete_task');
  
  
  
- 
+    //Routes which are handles the roles
     Route::get('/admin/roles', [AdminRolesController::class, 'index'])->name('admin.index');
- 
- 
     Route::get('/admin/roles/create', [AdminRolesController::class, 'create'])->name('admin.create');
- 
- 
     Route::post('/admin/roles', [AdminRolesController::class, 'store'])->name('admin.store');
- 
- 
     Route::get('/admin/roles/{id}/edit', [AdminRolesController::class, 'edit'])->name('admin.edit');
- 
- 
     Route::put('/admin/roles/{id}', [AdminRolesController::class, 'update'])->name('admin.update');
- 
     Route::delete('/admin/roles/{id}', [AdminRolesController::class, 'destroy'])->name('admin.destroy');
  
+
     //route for admin dashboard
     Route::get('admin', [AdminController::class, 'showAdminPage'])->name('admin_dashboard');
- 
- 
     Route::get('create_appointment',[ShowUserManagement::class,'create_customer_appointment'])->name('create_customer_appointment');
- 
+    
+
+    //route to redirect to home page
     Route::get('back',function(){
         return redirect('home');
     })->name('back');
  
+
+    //Routes which are used to Crud operations 
     Route::post('store_customer_appointment',[StoreUserManagement::class,'create_the_appointment'])->name('store_customer_appointment');
- 
     Route::get('show_customer_appointment',[ShowUserManagement::class,'show_appointments'])->name('show_customer_appointment');
- 
     Route::get('edit_appointment/{id}',[ShowUserManagement::class,'edit_appointment'])->name('edit_appointment');
- 
     Route::put('update_appointment/{id}',[StoreUserManagement::class,'update_the_appointment'])->name('update_appointment');
- 
     Route::delete('delete_appointment/{id}',[StoreUserManagement::class,'delete_the_appointment'])->name('delete_appointment');
- 
     Route::get('edit_customers/{id}',[ShowUserManagement::class,'edit_customers'])->name('edit_customer');
- 
     Route::put('update_customers/{id}',[StoreUserManagement::class,'update_customer'])->name('update_customer');
- 
     Route::delete('delete_customer/{id}',[StoreUserManagement::class,'delete_customer'])->name('delete_customer');
  
 
@@ -241,8 +222,7 @@ Route::middleware(['auth', 'otp.verified'])->group(function(){
     Route::delete('delete-task/{taskId}', [AdminTaskController::class, 'deleteTask'])->name('delete-task') ;
     
 
-    //Routes for show activity logs 
-
+    //Routes for show activity logs
     Route::get('show-activity-logs-admin', [ActivityLogController::class, 'showActivityLogToAdmin'])->name('show-activity-logs-admin') ;
     Route::get('show-activity-log-user', [ActivityLogController::class, 'showActivityLogToUser'])->name('show-activity-logs-user') ;
 

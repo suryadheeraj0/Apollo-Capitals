@@ -40,7 +40,7 @@
             <!-- Sorting Options -->
             <select name="sort_by">
                 <option value="created_at" {{ $sortBy == 'created_at' ? 'selected' : '' }}>Sort by Date</option>
-                <option value="title" {{ $sortBy == 'title' ? 'selected' : '' }}>Sort by Title</option>
+                <option value="task" {{ $sortBy == 'task' ? 'selected' : '' }}>Sort by Task</option>
                 <option value="priority" {{ $sortBy == 'priority' ? 'selected' : '' }}>Sort by Priority</option>
                 <option value="status" {{ $sortBy == 'status' ? 'selected' : '' }}>Sort by Status</option>
             </select>

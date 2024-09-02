@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 
 class DeleteController extends Controller
 {
+    /* deleted the user from the database which is the admin privilages
+    */
     public function deleteUser(Request $request,string $id) {
         $user = User::findOrFail($id) ;
         $user->delete() ;
