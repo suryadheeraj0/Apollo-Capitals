@@ -41,6 +41,7 @@ class ShowUserManagement extends Controller
         if ($query) {
             $tasks = $tasks->where(function ($q) use ($query) {
                 $q->where('task', 'LIKE', "%{$query}%")
+                ->orWhere('description', 'LIKE', "%{$query}%")
                   ->orWhereHas('user', function ($q) use ($query) {
                       $q->where('name', 'LIKE', "%{$query}%");
                   });

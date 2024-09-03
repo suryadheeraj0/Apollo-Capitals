@@ -3,11 +3,14 @@
     <div class="container mt-4">
         <div>
             @if ($errors->any())
-                @foreach ($errors as $error)
-                    {{$error}}
+               <div class="alert alert-danger">
+               <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
                 @endforeach
-            @endif
+           </ul>
         </div>
+        @endif
         <h1>Edit the Appointment</h1>
  
         <form id="appointmentForm" action="{{ route('update_appointment', $appointment->id) }}" method="POST">
@@ -16,8 +19,7 @@
             <div class="row mb-3">
                 <label for="title" class="col-sm-2 col-form-label">Appointment Title</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="title" name="title" value='{{ $appointment->title }}'
-                        required>
+                    <input type="text" class="form-control" id="title" name="title" value='{{ $appointment->title }}''>
                 </div>
             </div>
  
@@ -31,7 +33,7 @@
             <div class="row mb-3">
                 <label for="start_date" class="col-sm-2 col-form-label">Start Date and Time</label>
                 <div class="col-sm-10">
-                    <input type="datetime-local" class="form-control" id="start_date" name="start_date" min="{{ now()->format('Y-m-d\TH:i') }}" required
+                    <input type="datetime-local" class="form-control" id="start_date" name="start_date" min="{{ now()->format('Y-m-d\TH:i') }}"
                         value='{{ $appointment->start_date }}'>
                 </div>
             </div>
@@ -39,7 +41,7 @@
             <div class="row mb-3">
                 <label for="end_date" class="col-sm-2 col-form-label">End Date and Time</label>
                 <div class="col-sm-10">
-                    <input type="datetime-local" class="form-control" id="end_date" name="end_date" min="{{ now()->format('Y-m-d\TH:i') }}" required
+                    <input type="datetime-local" class="form-control" id="end_date" name="end_date" min="{{ now()->format('Y-m-d\TH:i') }}"
                         value='{{ $appointment->end_date }}'>
                 </div>
             </div>
@@ -64,7 +66,7 @@
             <div class="row mb-3">
                 <label for="customer_id" class="col-sm-2 col-form-label">Customer</label>
                 <div class="col-sm-10">
-                    <select class="form-select" id="customer_id" name="customer_id" required>
+                    <select class="form-select" id="customer_id" name="customer_id">
                         <option value="">{{ $appointment->customer->name }}</option>
                         @foreach ($customers as $customer)
                             <option value="{{ $customer->id }}">{{ $customer->email }}</option>

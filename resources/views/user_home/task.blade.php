@@ -1,6 +1,15 @@
 @extends('layouts.master')
  
 @section('content')
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul class="mb-0">
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
     <div class="container mt-4">
         <h1>Create a New Task</h1>
  
@@ -31,7 +40,7 @@
                 <label for="due_date" class="col-sm-2 col-form-label">Due Date and Time</label>
                 <div class="col-sm-10">
                     <input type="datetime-local" class="form-control @error('due_date') is-invalid @enderror" id="due_date"
-                        name="due_date" required>
+                        name="due_date">
                     @error('due_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -41,8 +50,7 @@
             <div class="row mb-3">
                 <label for="priority" class="col-sm-2 col-form-label">Priority</label>
                 <div class="col-sm-10">
-                    <select class="form-select @error('priority') is-invalid @enderror" id="priority" name="priority"
-                        required>
+                    <select class="form-select @error('priority') is-invalid @enderror" id="priority" name="priority">
                         <option value="">Select Priority</option>
                         <option value="1">High</option>
                         <option value="2">Medium</option>
@@ -65,9 +73,6 @@
     </div>
  
     <script>
-        document.getElementById('create-task-form').addEventListener('submit', function() {
-            alert("Task added successfully!");
-        });
     </script>
 @endsection
  

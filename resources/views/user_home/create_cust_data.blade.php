@@ -2,6 +2,15 @@
  
 @section('content')
     <div class="container mt-5">
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
         <div>
             @if(session('message'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -31,7 +40,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 <label for="email" class="form-label">Email Address</label>
-                                <input type="email" class="form-control" id="email" name="email"
+                                <input type="text" class="form-control" id="email" name="email"
                                     placeholder="Enter email address">
                             </div>
                             <div class="form-group mb-3">

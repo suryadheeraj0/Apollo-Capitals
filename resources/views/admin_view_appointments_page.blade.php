@@ -15,6 +15,7 @@
     <!-- Search Form -->
     <div class="form-container">
         <form action="{{ route('get-search-results-for-appointments') }}" method="GET">
+            @csrf
             <input type="text" name="query" placeholder="Search..." value="{{ request('query') }}">
             <label for="date_from">From Date</label>
             <input type="date" id = "date_from" name="date_from" placeholder="From" value="{{ request('date_from') }}">

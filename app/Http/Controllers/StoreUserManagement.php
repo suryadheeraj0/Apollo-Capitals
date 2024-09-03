@@ -13,7 +13,8 @@ class StoreUserManagement extends Controller
     {
         $user=auth()->user();
         $request->validate([
-            'task' => 'required|string|max:140',
+            'task' => 'required|string|max:50',
+            'description'=>'required|max:255',
             'description' => 'nullable|string|max:255',
             'due_date' => 'required|date',
             'priority' => 'required|string',
@@ -45,10 +46,10 @@ class StoreUserManagement extends Controller
     {
  
         $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:15',
-            'address' => 'nullable|string|max:255',
+            'name' => 'required|string|min:5|max:20',
+            'email' => 'required|email|max:50',
+            'phone' => 'required|numeric|digits:10',
+            'address' => 'nullable|string|max:255|required',
         ]);
  
         $user = auth()->user();
@@ -139,13 +140,13 @@ class StoreUserManagement extends Controller
  
        $validatedData = $request->validate([
         'title' => 'required|string|max:255',
-        'description' => 'nullable|string',
+        'description' => 'nullable|string|required',
         'start_date' => 'required|date',
         'end_date' => 'required|date|after_or_equal:start_date',
-        'location' => 'nullable|string|max:255',
-        'attendees' => 'nullable|string',
+        'location' => 'nullable|string|max:255|required',
+        'attendees' => 'nullable|string|required',
         'customer_id' => 'required|exists:customers,id',
-        'task_id' => 'nullable|exists:tasks,id',
+        'task_id' => 'nullable|exists:tasks,id|required',
        ]);
  
  
@@ -166,6 +167,17 @@ class StoreUserManagement extends Controller
     }
  
     public function update_the_appointment(Request $request,string $id){
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string|required',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'location' => 'nullable|string|max:255|required',
+            'attendees' => 'nullable|string|required',
+            'customer_id' => 'required|exists:customers,id',
+            'task_id' => 'nullable|exists:tasks,id|required',
+           ]);
+        
         $appointment=Appointment::findOrFail($id);
         $appointment->title = $request->title;
         $appointment->description = $request->description;
@@ -190,6 +202,11 @@ class StoreUserManagement extends Controller
     }
  
     public function update_customer(Request $request,string $id){
+        $request->validate([
+            'name'=>'required|min:5|max:20',
+            'email'=>'required|email',
+            'phone_number'=>'numeric|required|digits:10',
+        ]);
         $customer=Customer::findOrFail($id);
         $customer->name=$request->name;
         $customer->email=$request->email;

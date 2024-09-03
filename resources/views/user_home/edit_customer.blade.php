@@ -7,6 +7,16 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 @endif
+<div>
+    @if ($errors->any())
+       <div class="alert alert-danger">
+       <ul class="mb-0">
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+   </ul>
+</div>
+@endif
     <div class="container mt-5">
         <h2>Edit Customer</h2>
         <form action='{{ route('update_customer', $customer->id) }}' method='POST' class="mt-4">
@@ -14,17 +24,16 @@
             @method('PUT')
             <div class="form-group mb-3">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{ $customer->name }}" required>
+                <input type="text" class="form-control" id="name" name="name" value="{{ $customer->name }}">
             </div>
             <div class="form-group mb-3">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" value="{{ $customer->email }}"
-                    required>
+                <input type="text" class="form-control" id="email" name="email" value="{{ $customer->email }}">
             </div>
             <div class="form-group mb-3">
                 <label for="phone_number">Phone Number</label>
                 <input type="tel" class="form-control" id="phone_number" name="phone_number"
-                    value="{{ $customer->phone_number }}" required>
+                    value="{{ $customer->phone_number }}">
             </div>
             <button type="submit" class="btn btn-primary">Edit Customer</button>
             @if (auth()->user()->role === "Admin")
